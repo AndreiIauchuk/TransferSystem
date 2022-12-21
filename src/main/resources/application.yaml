@@ -1,0 +1,14 @@
+spring:
+  activemq:
+    broker-url: ${ACTIVE_MQ_URL:tcp://localhost:61616}
+    user: ${ACTIVE_MQ_USERNAME:admin}
+    password: ${ACTIVE_MQ_PASSWORD:admin}
+    packages:
+      trusted: com.nordea.iovchuk.transfer_system.entity
+
+active-mq:
+  transfer:
+    request:
+      queue: ${TRANSFER_REQUEST_MQ:transfer_request_mq}
+    response:
+      queue: ${TRANSFER_RESPONSE_MQ:transfer_response_mq}
