@@ -1,6 +1,5 @@
 spring:
   activemq:
-    broker-url: ${ACTIVE_MQ_URL:tcp://localhost:61616}
     user: ${ACTIVE_MQ_USERNAME:admin}
     password: ${ACTIVE_MQ_PASSWORD:admin}
     packages:

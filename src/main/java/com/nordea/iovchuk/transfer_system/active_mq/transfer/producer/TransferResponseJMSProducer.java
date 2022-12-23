@@ -11,10 +11,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class TransferResponseJMSProducer {
 
-   private final JmsTemplate jmsTemplate;
-
     @Value("${active-mq.transfer.response.queue}")
     private String queue;
+
+    private final JmsTemplate jmsTemplate;
 
     @Autowired
     public TransferResponseJMSProducer(final JmsTemplate jmsTemplate) {
@@ -23,10 +23,21 @@ public class TransferResponseJMSProducer {
 
     public void send(final Human human) {
         try {
-            log.info("Sending message to queue: " + queue + " ...");
+            log.info("Sending message to queue: [" + queue + "] ...");
             jmsTemplate.convertAndSend(queue, human);
+            log.info("Successfully sent message to queue: [" + queue + "] !");
         } catch (Exception e) {
-            log.error("Received exception during sending Message to queue: " + queue, e);
+            log.error("Received exception during sending Message to queue: [" + queue + "]", e);
+        }
+    }
+
+    public void sendText(final String text) {
+        try {
+            log.info("Sending message to queue: [" + queue + "] ...");
+            jmsTemplate.send(queue, s -> s.createTextMessage(text));
+            log.info("Successfully sent message to queue: [" + queue + "] !");
+        } catch (Exception e) {
+            log.error("Received exception during sending Message to queue: [" + queue + "]", e);
         }
     }
 }

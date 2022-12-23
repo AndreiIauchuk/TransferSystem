@@ -20,7 +20,7 @@ public class TransferRequestJMSConsumer{
     @JmsListener(destination = "${active-mq.transfer.response.queue}")
     @SendTo("[topic for answers]")
     public void onMessage(final Human human) {
-        log.info("Getting message from queue: " + responseQueue + " ...");
-        log.info("Message = " + human);
+        log.info("Getting message from queue: [" + responseQueue + "] ...");
+        log.info("Read message is " + human);
     }
 }

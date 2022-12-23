@@ -1,0 +1,6 @@
+active-mq:
+  transfer:
+    request:
+      queue: transfer_request_mq
+    response:
+      queue: transfer_response_mq
