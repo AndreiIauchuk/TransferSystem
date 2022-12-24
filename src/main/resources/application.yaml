@@ -4,6 +4,10 @@ spring:
     password: ${ACTIVE_MQ_PASSWORD:admin}
     packages:
       trusted: com.nordea.iovchuk.transfer_system.entity
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
 
 active-mq:
   transfer:
