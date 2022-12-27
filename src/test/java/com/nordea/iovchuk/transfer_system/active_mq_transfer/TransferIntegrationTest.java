@@ -1,9 +1,10 @@
 package com.nordea.iovchuk.transfer_system.active_mq_transfer;
 
+import com.example.exercises.transfersystem.transfer_request_response.ActionType;
+import com.example.exercises.transfersystem.transfer_request_response.TransferRequestType;
 import com.nordea.iovchuk.transfer_system.active_mq.transfer.consumer.TransferRequestJMSConsumer;
 import com.nordea.iovchuk.transfer_system.active_mq.transfer.producer.TransferResponseJMSProducer;
 import com.nordea.iovchuk.transfer_system.config.ActiveMQTestConfig;
-import com.nordea.iovchuk.transfer_system.entity.Human;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,6 +13,8 @@ import org.springframework.jms.core.JmsTemplate;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
+
+import java.math.BigDecimal;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.testcontainers.utility.DockerImageName.parse;
@@ -43,10 +46,15 @@ public class TransferIntegrationTest {
 
     @Test
     public void whenSendingMessage_thenSuccessful() {
-        final Human human = new Human("name", "surname");
-        producer.send(human);
-        Human receivedHuman = (Human) jmsTemplate.receiveAndConvert(queue);
-        assertEquals(human, receivedHuman);
+        final TransferRequestType requestType = new TransferRequestType();
+        requestType.setRequestId("requestId");
+        requestType.setTargetAccountNumber("targetAccountNumber");
+        requestType.setAction(ActionType.DEBIT);
+        requestType.setCurrency("currency");
+        requestType.setQuantity(BigDecimal.valueOf(100));
+        producer.send(requestType);
+        TransferRequestType receivedRequestType = (TransferRequestType) jmsTemplate.receiveAndConvert(queue);
+        assertEquals(requestType, receivedRequestType);
     }
 
 }

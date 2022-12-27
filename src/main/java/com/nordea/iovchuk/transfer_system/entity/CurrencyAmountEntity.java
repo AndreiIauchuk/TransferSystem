@@ -1,15 +1,13 @@
 package com.nordea.iovchuk.transfer_system.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.Hibernate;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
@@ -21,14 +19,22 @@ import java.util.Objects;
 public class CurrencyAmountEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private int id;
+    private Integer id;
 
     @Column(name = "currency", nullable = false, length = 3)
+    @JsonProperty("currency")
     private String currency;
 
-    @Column(name = "account_id")
-    private Integer accountId;
+    @Column(name = "amount")
+    @JsonProperty("amount")
+    private double amount;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "account_id")
+    @ToString.Exclude
+    private AccountEntity account;
 
     @Override
     public boolean equals(Object o) {

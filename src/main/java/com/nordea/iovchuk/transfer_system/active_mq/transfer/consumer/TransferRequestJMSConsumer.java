@@ -1,14 +1,14 @@
 package com.nordea.iovchuk.transfer_system.active_mq.transfer.consumer;
 
-import com.nordea.iovchuk.transfer_system.entity.Human;
+import com.example.exercises.transfersystem.transfer_request_response.TransferRequestType;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Component;
 
-@Slf4j
 @Component
+@Slf4j
 public class TransferRequestJMSConsumer{
 
     @Value("${active-mq.transfer.request.queue}")
@@ -19,8 +19,8 @@ public class TransferRequestJMSConsumer{
 
     @JmsListener(destination = "${active-mq.transfer.response.queue}")
     @SendTo("[topic for answers]")
-    public void onMessage(final Human human) {
+    public void onMessage(final TransferRequestType requestType) {
         log.info("Getting message from queue: [" + responseQueue + "] ...");
-        log.info("Read message is " + human);
+        log.info("Read message is " + requestType);
     }
 }
