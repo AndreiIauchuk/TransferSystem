@@ -11,8 +11,8 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class TransferResponseJMSProducer {
 
-    @Value("${active-mq.transfer.response.queue}")
-    private String queue;
+    @Value("${active-mq.transfer.request.queue}")
+    private String rqQueue;
 
     private final JmsTemplate jmsTemplate;
 
@@ -23,11 +23,11 @@ public class TransferResponseJMSProducer {
 
     public void send(final TransferRequestType requestType) {
         try {
-            log.info("Sending message to queue: [" + queue + "] ...");
-            jmsTemplate.convertAndSend(queue, requestType);
-            log.info("Successfully sent message to queue: [" + queue + "] !");
-        } catch (Exception e) {
-            log.error("Received exception during sending Message to queue: [" + queue + "]", e);
+            log.info("Sending message to queue: [ {} ] ...", rqQueue);
+            jmsTemplate.convertAndSend(rqQueue, requestType);
+            log.info("Successfully sent message to queue: [ {} ] !", rqQueue);
+        } catch (final Exception e) {
+            log.error("Received exception during sending Message to queue: [ {} ]", rqQueue, e);
         }
     }
 }

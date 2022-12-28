@@ -1,5 +1,6 @@
 package com.nordea.iovchuk.transfer_system.entity;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +9,7 @@ import lombok.ToString;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.Objects;
 
 @Entity
@@ -16,6 +18,7 @@ import java.util.Objects;
 @Setter
 @ToString
 @RequiredArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class CurrencyAmountEntity {
 
     @Id
@@ -29,7 +32,7 @@ public class CurrencyAmountEntity {
 
     @Column(name = "amount")
     @JsonProperty("amount")
-    private double amount;
+    private BigDecimal amount;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id")
