@@ -8,7 +8,6 @@ import com.nordea.iovchuk.transfer_system.entity.CurrencyAmountEntity;
 import com.nordea.iovchuk.transfer_system.exception.TransferException;
 import com.nordea.iovchuk.transfer_system.json_pojo.Accounts;
 import com.nordea.iovchuk.transfer_system.repository.CurrencyAmountRepository;
-import com.nordea.iovchuk.transfer_system.util.ApplicationArgumentsParser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;
@@ -28,6 +27,8 @@ public class TransferService {
 
     private final CurrencyAmountRepository currencyAmountRepository;
     private final ApplicationArguments args;
+    private final ApplicationArgumentsParser argumentsParser;
+    private final ObjectMapper objectMapper;
 
     /**
      * Transfer operation.
@@ -46,21 +47,12 @@ public class TransferService {
     /**
      *
      */
-    private void updateDB(final TransferRequestType requestType) throws TransferException {
+    public void updateDB(final TransferRequestType requestType) throws TransferException {
         final String accountNumber = requestType.getTargetAccountNumber();
         final ActionType actionType = requestType.getAction();
         final BigDecimal quantity = requestType.getQuantity();
         final CurrencyAmountEntity currencyAmount = findCurrencyAmountInDB(requestType);
-        final BigDecimal currentAmount = currencyAmount.getAmount();
-        if (actionType.equals(ActionType.DEBIT)) {
-            if (currentAmount.compareTo(quantity) < 0) {
-                throw new TransferException(
-                        "Account number [ " + accountNumber + " ] : Not enough funds for transfer!");
-            }
-            currencyAmount.setAmount(currentAmount.subtract(quantity));
-        } else { //CREDIT
-            currencyAmount.setAmount(currentAmount.add(quantity));
-        }
+        setAmountBasedOnActionType(actionType, quantity, currencyAmount, accountNumber);
         currencyAmountRepository.save(currencyAmount);
     }
 
@@ -82,7 +74,7 @@ public class TransferService {
     /**
      *
      */
-    private void updateImportFile(final TransferRequestType requestType) throws TransferException {
+    public void updateImportFile(final TransferRequestType requestType) throws TransferException {
         final ActionType actionType = requestType.getAction();
         final BigDecimal quantity = requestType.getQuantity();
         final String currency = requestType.getCurrency();
@@ -93,23 +85,32 @@ public class TransferService {
             log.error(
                     "Account number [ {} ] : Presented currency [ {} ] with account number [ {} ]" +
                             " is not exist in import file!",
-                    accountNumber, accountNumber, currency);
+                    accountNumber, currency, accountNumber);
             return;
+        }
+
+        setAmountBasedOnActionType(actionType, quantity, currencyAmount, accountNumber);
+
+        try {
+            final File accountsFile = new File(argumentsParser.getAccountsImportFilePath(args));
+            objectMapper.writerWithDefaultPrettyPrinter().writeValue(accountsFile, accounts);
+        } catch (IOException e) {
+            throw new TransferException(e.getMessage());
+        }
     }
 
+    private void setAmountBasedOnActionType(ActionType actionType, BigDecimal quantity,
+                                            CurrencyAmountEntity currencyAmount, String accountNumber)
+            throws TransferException {
         final BigDecimal currentAmount = currencyAmount.getAmount();
         if (actionType.equals(ActionType.DEBIT)) {
+            if (currentAmount.compareTo(quantity) < 0) {
+                throw new TransferException(
+                        "Account number [ " + accountNumber + " ] : Not enough funds for transfer!");
+            }
             currencyAmount.setAmount(currentAmount.subtract(quantity));
         } else { //CREDIT
             currencyAmount.setAmount(currentAmount.add(quantity));
-        }
-
-        try {
-            final File accountsFile = new File(ApplicationArgumentsParser.getAccountsImportFilePath(args));
-            final ObjectMapper mapper = new ObjectMapper();
-            mapper.writerWithDefaultPrettyPrinter().writeValue(accountsFile, accounts);
-        } catch (IOException e) {
-            throw new TransferException(e.getMessage());
         }
     }
 
@@ -140,7 +141,7 @@ public class TransferService {
 
     private Accounts findAccountsInImportFile() throws TransferException {
         try {
-            return ApplicationArgumentsParser.parseAccountsFromImportFile(args);
+            return argumentsParser.parseAccountsFromImportFile(args);
         } catch (Exception e) {
             throw new TransferException(e.getMessage());
         }

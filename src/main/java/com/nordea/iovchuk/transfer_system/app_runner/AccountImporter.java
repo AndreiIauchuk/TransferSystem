@@ -3,7 +3,7 @@ package com.nordea.iovchuk.transfer_system.app_runner;
 import com.nordea.iovchuk.transfer_system.entity.AccountEntity;
 import com.nordea.iovchuk.transfer_system.json_pojo.Accounts;
 import com.nordea.iovchuk.transfer_system.repository.AccountRepository;
-import com.nordea.iovchuk.transfer_system.util.ApplicationArgumentsParser;
+import com.nordea.iovchuk.transfer_system.service.ApplicationArgumentsParser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;
@@ -19,6 +19,7 @@ import java.util.List;
 public class AccountImporter implements ApplicationRunner {
 
     private final AccountRepository accountRepository;
+    private final ApplicationArgumentsParser argumentsParser;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -33,7 +34,7 @@ public class AccountImporter implements ApplicationRunner {
      */
     private void importAccounts(final ApplicationArguments args) throws IOException {
         log.info("Importing accounts...");
-        final Accounts accounts = ApplicationArgumentsParser.parseAccountsFromImportFile(args);
+        final Accounts accounts = argumentsParser.parseAccountsFromImportFile(args);
         final List<AccountEntity> accountEntities = accounts.getAccountEntities();
         accountEntities.removeIf(account -> accountRepository.existsByNumber(account.getNumber()));
 

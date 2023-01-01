@@ -1,8 +1,8 @@
 package com.nordea.iovchuk.transfer_system.config;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
 import org.springframework.jms.config.JmsListenerContainerFactory;
 import org.springframework.jms.core.JmsTemplate;
@@ -12,9 +12,9 @@ import org.springframework.jms.support.converter.MessageType;
 
 import javax.jms.ConnectionFactory;
 
-import static com.nordea.iovchuk.transfer_system.active_mq_transfer.TransferIntegrationTest.activeMqContainer;
+import static com.nordea.iovchuk.transfer_system.integration.TransferIntegrationTest.activeMqContainer;
 
-@Configuration
+@TestConfiguration
 public class ActiveMQTestConfig {
 
     @Bean

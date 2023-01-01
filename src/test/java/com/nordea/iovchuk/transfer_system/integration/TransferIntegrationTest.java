@@ -1,14 +1,15 @@
-package com.nordea.iovchuk.transfer_system.active_mq_transfer;
+package com.nordea.iovchuk.transfer_system.integration;
 
 import com.example.exercises.transfersystem.transfer_request_response.ActionType;
 import com.example.exercises.transfersystem.transfer_request_response.TransferRequestType;
 import com.nordea.iovchuk.transfer_system.active_mq.transfer.consumer.TransferRequestJMSConsumer;
 import com.nordea.iovchuk.transfer_system.active_mq.transfer.producer.TransferResponseJMSProducer;
-import com.nordea.iovchuk.transfer_system.config.ActiveMQTestConfig;
+import com.nordea.iovchuk.transfer_system.app_runner.AccountImporter;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.jms.core.JmsTemplate;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.junit.jupiter.Container;
@@ -19,11 +20,7 @@ import java.math.BigDecimal;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.testcontainers.utility.DockerImageName.parse;
 
-@SpringBootTest(
-        classes = {
-                ActiveMQTestConfig.class,
-                TransferResponseJMSProducer.class,
-                TransferRequestJMSConsumer.class})
+@SpringBootTest
 @Testcontainers
 public class TransferIntegrationTest {
 
@@ -40,6 +37,9 @@ public class TransferIntegrationTest {
 
     @Autowired
     private TransferRequestJMSConsumer consumer;
+
+    @MockBean
+    private AccountImporter accountImporter;
 
     @Value("${active-mq.transfer.response.queue}")
     private String queue;

@@ -1,21 +1,24 @@
-package com.nordea.iovchuk.transfer_system.util;
+package com.nordea.iovchuk.transfer_system.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nordea.iovchuk.transfer_system.exception.NoAccountsImportFilePathException;
 import com.nordea.iovchuk.transfer_system.json_pojo.Accounts;
-import lombok.experimental.UtilityClass;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
+import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.IOException;
 
-@UtilityClass
+@Component
+@RequiredArgsConstructor
 public class ApplicationArgumentsParser {
+
+    private final ObjectMapper objectMapper;
 
     public Accounts parseAccountsFromImportFile(final ApplicationArguments args) throws IOException {
         final File accountsFile = new File(getAccountsImportFilePath(args));
-        final ObjectMapper mapper = new ObjectMapper();
-        return mapper.readValue(accountsFile, Accounts.class);
+        return objectMapper.readValue(accountsFile, Accounts.class);
     }
 
     public String getAccountsImportFilePath(final ApplicationArguments args) {
