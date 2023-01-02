@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class TransferRequestJMSConsumer{
+public class TransferRequestJMSConsumer {
 
     private final TransferService transferService;
     private final TransferRequestToResponseTypeMapper mapper;

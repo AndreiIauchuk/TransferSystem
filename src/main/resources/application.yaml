@@ -20,3 +20,9 @@ active-mq:
       queue: ${TRANSFER_REQUEST_MQ:transfer_request_mq}
     response:
       queue: ${TRANSFER_RESPONSE_MQ:transfer_response_mq}
+
+logging:
+  level:
+    org:
+      hibernate:
+        type: trace

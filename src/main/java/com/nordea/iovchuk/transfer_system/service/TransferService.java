@@ -17,7 +17,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -78,9 +81,9 @@ public class TransferService {
         final ActionType actionType = requestType.getAction();
         final BigDecimal quantity = requestType.getQuantity();
         final String currency = requestType.getCurrency();
+        final String accountNumber = requestType.getTargetAccountNumber();
         final Accounts accounts = findAccountsInImportFile();
         final CurrencyAmountEntity currencyAmount = findCurrencyAmountInAccounts(accounts, requestType);
-        final String accountNumber = requestType.getTargetAccountNumber();
         if (currencyAmount == null) {
             log.error(
                     "Account number [ {} ] : Presented currency [ {} ] with account number [ {} ]" +
@@ -92,9 +95,11 @@ public class TransferService {
         setAmountBasedOnActionType(actionType, quantity, currencyAmount, accountNumber);
 
         try {
-            final File accountsFile = new File(argumentsParser.getAccountsImportFilePath(args));
+            final URL accountsFileUrl = getClass().getClassLoader()
+                    .getResource(argumentsParser.getAccountsImportFilePath(args));
+            final File accountsFile = new File(Objects.requireNonNull(accountsFileUrl).toURI());
             objectMapper.writerWithDefaultPrettyPrinter().writeValue(accountsFile, accounts);
-        } catch (IOException e) {
+        } catch (IOException | URISyntaxException | NullPointerException e) {
             throw new TransferException(e.getMessage());
         }
     }
@@ -126,9 +131,6 @@ public class TransferService {
                 .orElse(null);
 
         if (account == null) {
-            log.error(
-                    "Account number [ {} ] : Account with number [ {} ] is not exist in import file!",
-                    accountNumber, accountNumber);
             return null;
         }
 

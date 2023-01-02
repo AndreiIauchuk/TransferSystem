@@ -7,8 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.stereotype.Component;
 
-import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 
 @Component
 @RequiredArgsConstructor
@@ -17,8 +17,8 @@ public class ApplicationArgumentsParser {
     private final ObjectMapper objectMapper;
 
     public Accounts parseAccountsFromImportFile(final ApplicationArguments args) throws IOException {
-        final File accountsFile = new File(getAccountsImportFilePath(args));
-        return objectMapper.readValue(accountsFile, Accounts.class);
+        URL accountsFileUrl = getClass().getClassLoader().getResource(getAccountsImportFilePath(args));
+        return objectMapper.readValue(accountsFileUrl, Accounts.class);
     }
 
     public String getAccountsImportFilePath(final ApplicationArguments args) {
