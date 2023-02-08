@@ -91,7 +91,7 @@ public class TransferServiceTest {
 
         @BeforeEach
         public void beforeEach() throws IOException {
-            Mockito.when(argumentsParser.parseAccountsFromImportFile(args)).thenReturn(accounts());
+            Mockito.when(argumentsParser.parseAccountsFromImportFile()).thenReturn(accounts());
             lenient().when(argumentsParser.getAccountsImportFilePath(args)).thenReturn("");
             lenient().when(objectMapper.writerWithDefaultPrettyPrinter())
                     .thenReturn(new ObjectMapper().writerWithDefaultPrettyPrinter());

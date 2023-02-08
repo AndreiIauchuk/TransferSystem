@@ -160,7 +160,7 @@ public class TransferIntegrationTest {
     }
 
     void checkImportFile() throws IOException {
-        final Accounts accounts = argumentsParser.parseAccountsFromImportFile(args);
+        final Accounts accounts = argumentsParser.parseAccountsFromImportFile();
         LinkedList<AccountEntity> accountEntities = accounts.getAccountEntities();
         AccountEntity accountEntity = accountEntities.get(0);
         CurrencyAmountEntity currencyAmountEntity = accountEntity.getCurrencyAmount().get(0);

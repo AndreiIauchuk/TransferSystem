@@ -15,8 +15,9 @@ import java.net.URL;
 public class ApplicationArgumentsParser {
 
     private final ObjectMapper objectMapper;
+    private final ApplicationArguments args;
 
-    public Accounts parseAccountsFromImportFile(final ApplicationArguments args) throws IOException {
+    public Accounts parseAccountsFromImportFile() throws IOException {
         URL accountsFileUrl = getClass().getClassLoader().getResource(getAccountsImportFilePath(args));
         return objectMapper.readValue(accountsFileUrl, Accounts.class);
     }

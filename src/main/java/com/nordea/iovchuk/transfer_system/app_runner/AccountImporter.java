@@ -21,20 +21,22 @@ public class AccountImporter implements ApplicationRunner {
     private final AccountRepository accountRepository;
     private final ApplicationArgumentsParser argumentsParser;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        importAccounts(args);
+        importAccounts();
     }
 
     /**
      * Import the account information from a JSON file.
      *
-     * @param args application arguments
      * @throws IOException IOException
      */
-    private void importAccounts(final ApplicationArguments args) throws IOException {
+    private void importAccounts() throws IOException {
         log.info("Importing accounts...");
-        final Accounts accounts = argumentsParser.parseAccountsFromImportFile(args);
+        final Accounts accounts = argumentsParser.parseAccountsFromImportFile();
         final List<AccountEntity> accountEntities = accounts.getAccountEntities();
         accountEntities.removeIf(account -> accountRepository.existsByNumber(account.getNumber()));
 

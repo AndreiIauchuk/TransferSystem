@@ -143,7 +143,7 @@ public class TransferService {
 
     private Accounts findAccountsInImportFile() throws TransferException {
         try {
-            return argumentsParser.parseAccountsFromImportFile(args);
+            return argumentsParser.parseAccountsFromImportFile();
         } catch (Exception e) {
             throw new TransferException(e.getMessage());
         }
