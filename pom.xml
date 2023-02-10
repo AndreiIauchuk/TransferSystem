@@ -17,7 +17,7 @@
     <properties>
         <java.version>11</java.version>
         <log4j.version>2.19.0</log4j.version>
-        <testcontainers.version>1.17.6</testcontainers.version>
+        <!--<testcontainers.version>1.17.6</testcontainers.version>-->
         <mysql-connector-j.version>8.0.31</mysql-connector-j.version>
         <maven-jaxb2-plugin.version>0.14.0</maven-jaxb2-plugin.version>
         <mapstruct.version>1.5.3.Final</mapstruct.version>
@@ -60,12 +60,12 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
+        <!--<dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>junit-jupiter</artifactId>
             <version>${testcontainers.version}</version>
             <scope>test</scope>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>

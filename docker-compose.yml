@@ -1,0 +1,50 @@
+version: '3'
+
+services:
+  api:
+    container_name: transfer_system_api
+    depends_on:
+      mysql-db:
+        condition: service_healthy
+    build:
+      dockerfile: Dockerfile
+    env_file: .env
+    environment:
+      - DB_URL=jdbc:mysql://mysql-db:$DB_DOCKER_PORT/$DB_NAME
+      - DB_USERNAME=root
+      - DB_PASSWORD=$DB_ROOT_PASSWORD
+      - ACTIVE_MQ_BROKER_URL=tcp://active-mq:$ACTIVE_MQ_BROKER_PORT
+    ports:
+      - $API_LOCAL_PORT:$API_DOCKER_PORT
+    networks:
+      - transfer-system-network
+  mysql-db:
+    container_name: transfer_system_mysqldb
+    image: mysql:8.0.32
+    env_file: .env
+    environment:
+      - MYSQL_DATABASE=$DB_NAME
+      #TODO SECRET
+      - MYSQL_ROOT_PASSWORD=$DB_ROOT_PASSWORD
+    ports:
+      - $DB_LOCAL_PORT:$DB_DOCKER_PORT
+    healthcheck:
+      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
+      timeout: 7s
+      retries: 3
+    networks:
+      - transfer-system-network
+  active-mq:
+    container_name: transfer_system_activemq
+    image: rmohr/activemq:5.15.9-alpine
+    ports:
+      - 61616:61616
+      - 8161:8161
+    volumes:
+      - ~/Documents/data/activemq/data:/data/activemq
+      - ~/Documents/data/activemq/log:/var/log/activemq
+    networks:
+      - transfer-system-network
+
+networks:
+  transfer-system-network:
