@@ -1,29 +1,5 @@
 spring:
-  activemq:
-    broker-url: ${ACTIVE_MQ_BROKER_URL:tcp://activemq:61616}
-    user: ${ACTIVE_MQ_USERNAME:admin}
-    password: ${ACTIVE_MQ_PASSWORD:admin}
-    packages:
-      trusted: com.nordea.iovchuk.transfer_system.entity
-  datasource:
-    url: ${DB_URL}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
-  jpa:
-    properties:
-      hibernate:
-        generate_statistics: false
-        show_sql: true
-
-active-mq:
-  transfer:
-    request:
-      queue: ${TRANSFER_REQUEST_MQ:transfer_request_mq}
-    response:
-      queue: ${TRANSFER_RESPONSE_MQ:transfer_response_mq}
-
-logging:
-  level:
-    org:
-      hibernate:
-        type: trace
+  profiles:
+    include: >
+      mq,
+      db

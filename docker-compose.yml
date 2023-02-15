@@ -18,6 +18,7 @@ services:
       - $API_LOCAL_PORT:$API_DOCKER_PORT
     networks:
       - transfer-system-network
+      - nexus_nexus-network
   mysql-db:
     container_name: transfer_system_mysqldb
     image: mysql:8.0.32
@@ -41,10 +42,16 @@ services:
       - 61616:61616
       - 8161:8161
     volumes:
-      - ~/Documents/data/activemq/data:/data/activemq
-      - ~/Documents/data/activemq/log:/var/log/activemq
+      - activemq-data:/data/activemq
+      - activemq-log:/var/log/activemq
     networks:
       - transfer-system-network
 
+volumes:
+  activemq-data:
+  activemq-log:
+
 networks:
   transfer-system-network:
+  nexus_nexus-network:
+    external: true
