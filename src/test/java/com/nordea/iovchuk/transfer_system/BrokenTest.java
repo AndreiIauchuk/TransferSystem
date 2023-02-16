@@ -8,6 +8,7 @@ class BrokenTest {
 
     @Test
     public void brokenTest() {
+        System.out.println("HI MOM!");
         fail();
     }
 }
