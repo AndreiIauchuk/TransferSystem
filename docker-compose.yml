@@ -18,7 +18,7 @@ services:
       - $API_LOCAL_PORT:$API_DOCKER_PORT
     networks:
       - transfer-system-network
-      - nexus_nexus-network
+      #- nexus_nexus-network
   mysql-db:
     container_name: transfer_system_mysqldb
     image: mysql:8.0.32
@@ -53,5 +53,5 @@ volumes:
 
 networks:
   transfer-system-network:
-  nexus_nexus-network:
-    external: true
+  #nexus_nexus-network:
+  #  external: true
