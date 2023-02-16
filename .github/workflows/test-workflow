@@ -1,0 +1,16 @@
+name: test-action-name
+run-name: ${{ github.actor }} run-name
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  job-name:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+      - name: step name
+        run: mvn test

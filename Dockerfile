@@ -9,7 +9,10 @@ RUN mvn package
 # Run Stage
 FROM openjdk:18-alpine
 MAINTAINER Andrei Iauchuk <iovchukandrew@gmail.com>
-COPY --from=build /app/target/transfer_system-0.0.1-SNAPSHOT.jar app.jar
+COPY --from=build /app/target/transfer_system-0.0.1-SNAPSHOT.jar /app/app.jar
+RUN adduser -D localuser && chown -R localuser /app
+WORKDIR /app
+USER localuser
 CMD java -jar app.jar "import/example-transfer-system.json"
 
 
