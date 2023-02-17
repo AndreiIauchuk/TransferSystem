@@ -139,16 +139,12 @@
         </plugins>
     </build>
 
-   <distributionManagement>
+    <distributionManagement>
         <repository>
-            <id>nexus-releases</id>
-            <name>Releases</name>
-            <url>${nexus.maven-releases.url}</url>
+            <id>github</id>
+            <name>GitHub Packages</name>
+            <url>https://maven.pkg.github.com/AndreiIauchuk/TransferSystem</url>
         </repository>
-        <snapshotRepository>
-            <id>nexus-snapshots</id>
-            <url>${nexus.maven-snapshots.url}</url>
-        </snapshotRepository>
     </distributionManagement>
 
     <repositories>
