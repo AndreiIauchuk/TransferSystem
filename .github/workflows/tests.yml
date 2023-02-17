@@ -9,7 +9,7 @@ on:
 
 jobs:
   unit-tests:
-    runs-on: self-hosted-vm
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
       - name: Set up JDK
@@ -18,24 +18,24 @@ jobs:
           java-version: '17'
           distribution: temurin
           cache: maven
-      - name: mvn test repos and services
+      - name: Check repos and services tests
         run: mvn test -Dtest="*RepositoryTest, *ServiceTes*"
   integration-tests:
-    runs-on: self-hosted-vm
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
-      - name: Set up JDK1
+      - name: Set up JDK
         uses: actions/setup-java@v3
         with:
           java-version: '17'
           distribution: temurin
           cache: maven
-      - name: mvn integration test
+      - name: Check integration tests
         run: mvn test -Dtest="*IntegrationTest"
-  docker-up:
-    runs-on: self-hosted-vm
-    needs: [unit-tests, integration-tests]
-    steps:
-      - uses: actions/checkout@v3
-      - name: Docker compose up
-        run: sudo docker compose up -d --build
+  #docker-up:
+  #  runs-on: self-hosted-vm
+  #  needs: [unit-tests, integration-tests]
+  #  steps:
+  #    - uses: actions/checkout@v3
+  #    - name: Docker compose up
+  #      run: sudo docker compose up -d --build
