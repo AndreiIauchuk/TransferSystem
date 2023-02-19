@@ -24,6 +24,7 @@
        <nexus.maven-releases.url>http://localhost:8100/repository/maven-releases/</nexus.maven-releases.url>
     </properties>
 
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
