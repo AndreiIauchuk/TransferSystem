@@ -1,19 +1,5 @@
-active-mq:
-  transfer:
-    request:
-      queue: transfer_request_mq
-    response:
-      queue: transfer_response_mq
-
 spring:
-  datasource:
-    url: jdbc:h2:mem:database
-  flyway:
-    locations: filesystem:src/main/resources/db/migration
-    schemas: TRANSFER_SYSTEM
-
-logging:
-  level:
-    org:
-      hibernate:
-        type: trace
+  profiles:
+    include: >
+      mq,
+      db

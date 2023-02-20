@@ -1,0 +1,6 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:database
+  flyway:
+    locations: filesystem:src/main/resources/db/migration
+    schemas: TRANSFER_SYSTEM
