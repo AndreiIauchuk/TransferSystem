@@ -6,8 +6,16 @@ on:
     branches: [ "master" ]
 
 jobs:
+  #Unit tests
   unit-tests:
-    runs-on: ubuntu-22.04
+    strategy:
+      matrix:
+        os: [ ubuntu-22.04 ]
+        experimental: [ false ]
+        include:
+          - os: windows-2022
+            experimental: true
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
       - name: Set up JDK
@@ -17,9 +25,18 @@ jobs:
           distribution: temurin
           cache: maven
       - name: Check repos and services tests
-        run: mvn test -Dtest="*RepositoryTest, *ServiceTes*"
+        run: mvn surefire:test
+    continue-on-error: ${{ matrix.experimental }}
+  #Integration tests
   integration-tests:
-    runs-on: ubuntu-22.04
+    strategy:
+      matrix:
+        os: [ ubuntu-22.04 ]
+        experimental: [ false ]
+        include:
+          - os: windows-2022
+            experimental: true
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
       - name: Set up JDK
@@ -29,7 +46,10 @@ jobs:
           distribution: temurin
           cache: maven
       - name: Check integration tests
-        run: mvn test -Dtest="*IntegrationTest"
+        run: mvn failsafe:integration-test
+    continue-on-error: ${{ matrix.experimental }}
+
+
   #docker-up:
   #  runs-on: self-hosted-vm
   #  needs: [unit-tests, integration-tests]
