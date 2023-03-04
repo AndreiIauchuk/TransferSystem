@@ -36,5 +36,4 @@ build/
 /mvnw
 /mvnw.cmd
 
-.env
 /src/main/java/com/nordea/iovchuk/transfer_system/controller/TestController.java
