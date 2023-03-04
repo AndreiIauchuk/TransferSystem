@@ -10,12 +10,12 @@ services:
       dockerfile: Dockerfile
     env_file: .env
     environment:
-      - DB_URL=jdbc:mysql://mysql-db:$DB_DOCKER_PORT/$DB_NAME
-      - DB_USERNAME=root
-      - DB_PASSWORD=$DB_ROOT_PASSWORD
-      - ACTIVE_MQ_BROKER_URL=tcp://active-mq:$ACTIVE_MQ_BROKER_PORT
+      - MYSQL_URL=jdbc:mysql://mysql-db:${MYSQL_PORT:-3306}/${MYSQL_NAME:-transfer_system}
+      - MYSQL_USERNAME=${MYSQL_USERNAME:-root}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD:-root}
+      - ACTIVE_MQ_BROKER_URL=tcp://active-mq:${ACTIVE_MQ_BROKER_PORT:-61616}
     ports:
-      - $API_LOCAL_PORT:$API_DOCKER_PORT
+      - ${API_LOCAL_PORT:-8081}:${API_DOCKER_PORT:-8080}
     networks:
       - transfer-system-network
       #- nexus_nexus-network
@@ -24,11 +24,10 @@ services:
     image: mysql:8.0.32
     env_file: .env
     environment:
-      - MYSQL_DATABASE=$DB_NAME
-      #TODO SECRET
-      - MYSQL_ROOT_PASSWORD=$DB_ROOT_PASSWORD
+      - MYSQL_DATABASE=${MYSQL_NAME:-transfer_system}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_PASSWORD:-root}
     ports:
-      - $DB_LOCAL_PORT:$DB_DOCKER_PORT
+      - ${MYSQL_PORT:-3306}:${MYSQL_PORT:-3306}
     healthcheck:
       test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
       timeout: 7s
@@ -53,5 +52,6 @@ volumes:
 
 networks:
   transfer-system-network:
+  elasticsearch-network:
   #nexus_nexus-network:
   #  external: true
