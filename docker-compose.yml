@@ -28,6 +28,8 @@ services:
       - MYSQL_ROOT_PASSWORD=${MYSQL_PASSWORD:-root}
     ports:
       - ${MYSQL_PORT:-3306}:${MYSQL_PORT:-3306}
+    volumes:
+      - mysql-data:/var/lib/mysql
     healthcheck:
       test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
       timeout: 7s
@@ -47,11 +49,11 @@ services:
       - transfer-system-network
 
 volumes:
+  mysql-data:
   activemq-data:
   activemq-log:
 
 networks:
   transfer-system-network:
-  elasticsearch-network:
   #nexus_nexus-network:
   #  external: true

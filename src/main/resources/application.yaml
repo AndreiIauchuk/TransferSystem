@@ -2,4 +2,5 @@ spring:
   profiles:
     include: >
       mq,
-      db
+      mysql,
+      swagger
