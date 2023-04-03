@@ -1,0 +1,5 @@
+logstash:
+  host:
+    name: localhost
+  port:
+    number: 5000

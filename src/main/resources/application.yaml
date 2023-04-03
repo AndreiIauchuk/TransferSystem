@@ -3,4 +3,5 @@ spring:
     include: >
       mq,
       mysql,
-      swagger
+      swagger,
+      logstash

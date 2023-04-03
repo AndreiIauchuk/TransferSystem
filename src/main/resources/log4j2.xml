@@ -1,18 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="WARN">
     <Properties>
-        <Property name="LOG_PATTERN">
-            %d{yyyy-MM-dd HH:mm:ss.SSS} [%-5p] --- [%-20.30t] %-40.40c{1.} : %m%n%ex
-        </Property>
+        <property name="LOG_PATTERN">
+            %d{yyyy-mm-dd hh:mm:ss.sss} [%-5p] --- [%-20.30t] %-40.40c{1.} : %m%n%ex
+        </property>
     </Properties>
     <Appenders>
         <Console name="ConsoleDef" target="SYSTEM_OUT">
-            <PatternLayout pattern="${LOG_PATTERN}" disableAnsi="false"/>
+            <PatternLayout pattern="${LOG_PATTERN}"/>
         </Console>
+        <Socket name="LogstashDef"
+                host="${sys:logstash.host.name:-localhost}" port="${sys:logstash.port.number:-5000}"
+                reconnectionDelayMillis="5000">
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+        </Socket>
     </Appenders>
     <Loggers>
         <Root level="info">
             <AppenderRef ref="ConsoleDef"/>
+            <AppenderRef ref="LogstashDef"/>
         </Root>
     </Loggers>
 </Configuration>

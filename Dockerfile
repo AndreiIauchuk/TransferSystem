@@ -14,6 +14,8 @@ RUN adduser -D localuser && chown -R localuser /app
 WORKDIR /app
 USER localuser
 CMD java -jar app.jar "import/example-transfer-system.json"
+ENTRYPOINT ["java","-Dlogstash.host.name=localhost","-Dlogstash.port.number=5000",
+            "-jar","app.jar","\"import\/example-transfer-system.json\""]
 
 
 # Single stage (with Nexus)
